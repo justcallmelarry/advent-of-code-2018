@@ -13,7 +13,7 @@ class AdventOfCode:
             for line in input_file.read().split('\n'):
                 if line == '':
                     continue
-                self.input_list.append(int(line.replace('+', '')))
+                self.input_list.append(line)
 
     def output(self, *_output):
         self._results += [str(x) for x in _output]
