@@ -8,7 +8,7 @@ class AdevntOfCode:
         self._results = []
         self.input_list = []
 
-        self.frequency_list = [0]
+        self.frequency_list = set([0])
         self.frequency = 0, False
 
     def load_input(self):
@@ -37,7 +37,7 @@ class AdevntOfCode:
             if int(frequency) in self.frequency_list:
                 return frequency, True
             else:
-                self.frequency_list.append(int(frequency))
+                self.frequency_list.add(int(frequency))
         return frequency, False
 
 
