@@ -1,4 +1,5 @@
 import os
+import sys
 
 
 class AdventOfCode:
@@ -9,6 +10,8 @@ class AdventOfCode:
         self.input_list = []
 
     def load_input(self):
+        if any([x in sys.argv for x in ('--test', '-t')]):
+            self.input = os.path.join(self.filepath, 'sample.txt')
         with open(self.input, 'r') as input_file:
             for line in input_file.read().split('\n'):
                 if line == '':
