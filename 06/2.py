@@ -44,7 +44,6 @@ class AdventOfCode:
         for key, coord in coords.items():
             table[coord[1]][coord[0]] = key
         safe_area = 0
-        safe_tiles = []
         for y in range(max_y + 1):
             for x in range(max_x + 1):
                 total_dist = 0
@@ -57,8 +56,6 @@ class AdventOfCode:
                         break
                 if total_dist < self.target:
                     safe_area += 1
-                    safe_tiles.append([x, y, total_dist])
-        # print(safe_tiles)
         self.output(safe_area)
 
 
