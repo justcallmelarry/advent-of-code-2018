@@ -73,10 +73,6 @@ class AdventOfCode:
                     max_key = x
         self.output(max_area, max_key)
 
-        # for t in table_copy:
-        #     print(t)
-        # print(max_x, max_y)
-
 
 if __name__ == "__main__":
     AOC = AdventOfCode()
