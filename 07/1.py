@@ -49,13 +49,13 @@ class AdventOfCode:
                 dependencies = instructions.get(step, [])
                 if len(dependencies) == 0:
                     done.add(step)
-            im_stupid = sorted(done)[0]
-            answer += im_stupid
-            global_done.add(im_stupid)
-            steps.remove(im_stupid)
+            first_done = sorted(done)[0]
+            answer += first_done
+            global_done.add(first_done)
+            steps.remove(first_done)
             for v in instructions.values():
-                if im_stupid in v:
-                    v.remove(im_stupid)
+                if first_done in v:
+                    v.remove(first_done)
         self.output(answer)
 
 
