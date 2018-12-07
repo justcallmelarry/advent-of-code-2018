@@ -25,8 +25,38 @@ class AdventOfCode:
         print('\n'.join(self._results))
 
     def run(self):
+        steps = set([])
+        instructions = {}
         for instruction in self.input_list:
-            pass
+            instruction_list = instruction.split(' ')
+            requirement = instruction_list[1]
+            step = instruction_list[7]
+            if step not in steps:
+                steps.add(step)
+            if requirement not in steps:
+                steps.add(requirement)
+            if step not in instructions:
+                instructions[step] = []
+            instructions[step].append(requirement)
+
+        answer = ''
+        global_done = set([])
+        while len(steps):
+            done = set([])
+            for step in list(sorted(steps)):
+                if step in global_done:
+                    continue
+                dependencies = instructions.get(step, [])
+                if len(dependencies) == 0:
+                    done.add(step)
+            im_stupid = sorted(done)[0]
+            answer += im_stupid
+            global_done.add(im_stupid)
+            steps.remove(im_stupid)
+            for v in instructions.values():
+                if im_stupid in v:
+                    v.remove(im_stupid)
+        self.output(answer)
 
 
 if __name__ == "__main__":
