@@ -22,7 +22,11 @@ class AdventOfCode:
         self._results += [str(x) for x in _output]
 
     def results(self):
-        print('\n'.join(self._results))
+        _output = '\n'.join(self._results)
+        print(_output)
+        if '-d' in sys.argv:
+            with open(os.path.join(self.filepath, f'results-{__file__}.txt'), 'w') as results_file:
+                results_file.write(_output)
 
     def run(self):
         '''
