@@ -27,6 +27,7 @@ class AdventOfCode:
         if '-d' in sys.argv:
             with open(os.path.join(self.filepath, f'results-{__file__}.txt'), 'w') as results_file:
                 results_file.write(_output)
+                results_file.write('\n')
 
     def run(self):
         '''
