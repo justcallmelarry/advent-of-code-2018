@@ -28,6 +28,7 @@ class AdventOfCode:
         self._results = []
         self.input_list = []
         self.answer = 0
+        self.nodes = 0
 
     def load_input(self):
         if any([x in sys.argv for x in ('--test', '-t')]):
@@ -45,11 +46,11 @@ class AdventOfCode:
         print('\n'.join(self._results))
 
     def run(self):
-        self.nodes = 1
         copy_list = list(self.input_list)
         self.create_nodes(copy_list)
         self.calc_answer(self.root)
         self.output(self.answer)
+        self.output(self.nodes)
 
     def calc_answer(self, node):
         for x in node.metadata:
