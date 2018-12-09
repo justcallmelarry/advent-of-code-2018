@@ -25,7 +25,10 @@ class AdventOfCode:
         self._results += [str(x) for x in _output]
 
     def results(self):
-        print('\n'.join(self._results))
+        output = '\n'.join(self._results)
+        print(output)
+        with open(os.path.join(self.filepath, 'results.txt'), 'w') as results_file:
+            results_file.write(output)
 
     def run(self):
         def get_relative_pos(marble, circle_size, steps, clockwise):  # 1 + 2
