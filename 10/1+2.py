@@ -81,7 +81,7 @@ class AdventOfCode:
             done, nodes, height, width = move_nodes(nodes)
             second += 1
 
-        self.output('second:', second)
+        self.output(f'second: {second}', '\n')
         useless_columns = None
         min_x = min([x[0] for x in _copy])
         max_x = max([x[0] for x in _copy])
@@ -104,6 +104,7 @@ class AdventOfCode:
             if 1.0 not in o:
                 continue
             self.output(' '.join([str(x).replace('.0', '').replace('0', ' ').replace('1', 'X') for x in o[useless_columns:]]))
+        self.output('\n')
 
 
 if __name__ == '__main__':
