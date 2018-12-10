@@ -1,7 +1,7 @@
 import os
 import sys
 import numpy
-import time
+import copy
 
 
 class AdventOfCode:
@@ -59,30 +59,33 @@ class AdventOfCode:
         second = -1
 
         height = set([max_y])
-        width = set([max_x])
         done = False
         while not done:
             current_height = max(height)
-            current_width = max(width)
-            night_sky = numpy.zeros(shape=(current_height + 1, current_width + 1))
             height = set([])
             width = set([])
+            _copy = copy.deepcopy(nodes)
             for v in nodes:
-                position = v.get('position')
-                night_sky[position[1]][position[0]] = 1
                 movement = v.get('movement')
                 v['position'][0] += movement[0]
                 v['position'][1] += movement[1]
                 if v.get('position')[1] > current_height:
                     done = True
+                    break
                 else:
                     height.add(v.get('position')[1])
                     width.add(v.get('position')[0])
-            if '-t' in sys.argv:
-                time.sleep(0.2)
             second += 1
+
         self.output('second:', second)
         useless_columns = None
+        max_x = max([x.get('position')[0] for x in _copy])
+        max_y = max([x.get('position')[1] for x in _copy])
+        night_sky = numpy.zeros(shape=(max_y + 1, max_x + 1))
+
+        for v in _copy:
+            position = v.get('position')
+            night_sky[position[1]][position[0]] = 1
         for i, column in enumerate(night_sky.T):
             if 1.0 in column and useless_columns is None:
                 useless_columns = i
