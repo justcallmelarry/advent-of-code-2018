@@ -1,7 +1,6 @@
 import os
 import sys
 import numpy
-import copy
 
 
 class AdventOfCode:
@@ -32,6 +31,22 @@ class AdventOfCode:
                 results_file.write('\n')
 
     def run(self):
+        def move_nodes(_list):
+            return_list = []
+            height = set([])
+            width = set([])
+            done = False
+            for v in _list:
+                pos_x = v[0] + v[2]
+                pos_y = v[1] + v[3]
+                if pos_y > self.current_height or pos_x > self.current_width:
+                    done = True
+                else:
+                    width.add(pos_x)
+                    height.add(pos_y)
+                return_list.append([pos_x, pos_y, v[2], v[3]])
+            return done, return_list, height, width
+
         nodes = []
         min_x = 0
         max_x = 0
@@ -47,45 +62,40 @@ class AdventOfCode:
             max_x = max(max_x, position[0])
             min_y = min(min_y, position[1])
             max_y = max(max_y, position[1])
-            nodes.append({
-                'position': position,
-                'movement': movement
-            })
+            nodes.append([position[0], position[1], movement[0], movement[1]])
         for v in nodes:
-            v['position'][0] += abs(min_x)
-            v['position'][1] += abs(min_y)
+            v[0] += abs(min_x)
+            v[1] += abs(min_y)
         max_x = max_x + abs(min_x)
         max_y = max_y + abs(min_y)
         second = -1
 
         height = set([max_y])
+        width = set([max_x])
         done = False
         while not done:
-            current_height = max(height)
-            height = set([])
-            width = set([])
-            _copy = copy.deepcopy(nodes)
-            for v in nodes:
-                movement = v.get('movement')
-                v['position'][0] += movement[0]
-                v['position'][1] += movement[1]
-                if v.get('position')[1] > current_height:
-                    done = True
-                    break
-                else:
-                    height.add(v.get('position')[1])
-                    width.add(v.get('position')[0])
+            self.current_height = max(height)
+            self.current_width = max(width)
+            # _copy = copy.deepcopy(nodes)
+            _copy = list(nodes)
+            done, nodes, height, width = move_nodes(nodes)
             second += 1
 
         self.output('second:', second)
         useless_columns = None
-        max_x = max([x.get('position')[0] for x in _copy])
-        max_y = max([x.get('position')[1] for x in _copy])
+        min_x = min([x[0] for x in _copy])
+        max_x = max([x[0] for x in _copy])
+        min_y = min([x[1] for x in _copy])
+        max_y = max([x[1] for x in _copy])
+        for v in _copy:
+            v[0] -= min_x
+            v[1] -= min_y
+        max_x -= min_x
+        max_y -= min_y
         night_sky = numpy.zeros(shape=(max_y + 1, max_x + 1))
 
         for v in _copy:
-            position = v.get('position')
-            night_sky[position[1]][position[0]] = 1
+            night_sky[v[1]][v[0]] = 1
         for i, column in enumerate(night_sky.T):
             if 1.0 in column and useless_columns is None:
                 useless_columns = i
@@ -93,7 +103,7 @@ class AdventOfCode:
         for o in night_sky:
             if 1.0 not in o:
                 continue
-            self.output(' '.join([str(x).replace('.0', '').replace('0', '.') for x in o[useless_columns:]]))
+            self.output(' '.join([str(x).replace('.0', '').replace('0', ' ').replace('1', 'X') for x in o[useless_columns:]]))
 
 
 if __name__ == '__main__':

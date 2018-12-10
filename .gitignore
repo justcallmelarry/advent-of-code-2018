@@ -3,3 +3,5 @@ secret.txt
 .vscode
 __pycache__
 .DS_store
+benny.py
+carlos.py
