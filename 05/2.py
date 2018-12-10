@@ -4,7 +4,7 @@ import os
 class AdventOfCode:
     def __init__(self):
         self.filepath = os.path.dirname(os.path.abspath(__file__))
-        self.input = os.path.join(self.filepath, 'input.txt')
+        self.input = os.path.join(self.filepath, 'results.txt')
         self._results = []
         self.input_list = []
 

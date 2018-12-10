@@ -29,6 +29,8 @@ class AdventOfCode:
         while found:
             polymers, found = self.remove_reactions(polymers)
         self.output(len(polymers))
+        with open('results.txt', 'w') as results_file:
+            results_file.write(''.join(polymers))
 
     def remove_reactions(self, polymers):
         remove = set([])
