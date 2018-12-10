@@ -60,7 +60,7 @@ class AdventOfCode:
                     self.fabric[h][w] = 2
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     AOC = AdventOfCode()
     AOC.load_input()
     AOC.run()

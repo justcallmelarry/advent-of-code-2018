@@ -82,7 +82,7 @@ class AdventOfCode:
         print(self.root, 'metadata:', self.root.metadata)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     AOC = AdventOfCode()
     AOC.load_input()
     AOC.run()

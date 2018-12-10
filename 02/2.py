@@ -51,7 +51,7 @@ class AdevntOfCode:
         print('\n'.join(self._results))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     AOC = AdevntOfCode()
     AOC.load_input()
     AOC.run()

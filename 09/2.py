@@ -54,7 +54,7 @@ class AdventOfCode:
             self.output(f'winner: elf #{winning_player}', f'winning score: {score.get(winning_player)}', ' ')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     AOC = AdventOfCode()
     AOC.load_input()
     AOC.run()
