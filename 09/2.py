@@ -33,22 +33,18 @@ class AdventOfCode:
             players = game[0]
             score = {}
             circle = deque([0])
-            current_player = 1
             for marble in range(1, game[1] * 100 + 1):
                 if marble % 23 == 0:
-                    if current_player not in score:
-                        score[current_player] = 0
-                    score[current_player] += marble
+                    player = (marble - 1) % players
+                    if player not in score:
+                        score[player] = 0
+                    score[player] += marble
                     circle.rotate(-7)
                     extra = circle.pop()
-                    score[current_player] += extra
+                    score[player] += extra
                 else:
                     circle.rotate(2)
                     circle.append(marble)
-                if current_player == players:
-                    current_player = 1
-                else:
-                    current_player += 1
 
             winning_player = max(score, key=score.get)
             self.output(f'winner: elf #{winning_player}', f'winning score: {score.get(winning_player)}', ' ')
