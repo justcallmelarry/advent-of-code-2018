@@ -28,6 +28,9 @@ class AdventOfCode:
         print('\n'.join(self._results))
 
     def run(self):
+        '''
+        did this while tipsy, probably should improve on it
+        '''
         steps = set([])
         instructions = {}
         for instruction in self.input_list:
