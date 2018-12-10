@@ -1,3 +1,4 @@
+from collections import deque
 import os
 import sys
 
@@ -25,48 +26,25 @@ class AdventOfCode:
         self._results += [str(x) for x in _output]
 
     def results(self):
-        output = '\n'.join(self._results)
-        print(output)
-        with open(os.path.join(self.filepath, 'results.txt'), 'w') as results_file:
-            results_file.write(output)
+        print('\n'.join(self._results))
 
     def run(self):
-        def get_relative_pos(marble, circle_size, steps, clockwise):  # 1 + 2
-            if clockwise:
-                pos = marble + steps  # 3
-            else:
-                pos = marble - steps
-                if pos < 0:
-                    pos = circle_size + pos + 1
-            while pos > circle_size:  # 3 > 1
-                pos -= circle_size + 1
-            return pos
-
         for game_id, game in enumerate(self.input_list):
             players = game[0]
             score = {}
-            circle = [0]
-            current_marble_pos = 0
+            circle = deque([0])
             current_player = 1
             for marble in range(1, game[1] * 100 + 1):
-                circle_size = len(circle)
-                if circle_size == 1:
-                    circle.append(marble)
-                    current_marble_pos = 1
-                elif marble % 23 == 0:
+                if marble % 23 == 0:
                     if current_player not in score:
                         score[current_player] = 0
                     score[current_player] += marble
-                    current_marble_pos = get_relative_pos(current_marble_pos, circle_size - 1, 7, False)
-                    extra = circle.pop(current_marble_pos)
+                    circle.rotate(-7)
+                    extra = circle.pop()
                     score[current_player] += extra
                 else:
-                    current_marble_pos = get_relative_pos(current_marble_pos, circle_size - 1, 2, True)
-                    if current_marble_pos == 0:
-                        circle.append(marble)
-                        current_marble_pos = -1
-                    else:
-                        circle.insert(current_marble_pos, marble)
+                    circle.rotate(2)
+                    circle.append(marble)
                 if current_player == players:
                     current_player = 1
                 else:
