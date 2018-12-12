@@ -57,9 +57,7 @@ class AdventOfCode:
         offset = state.find('#') + 1
         offset = generations - offset + self.left_pots
         state = state.lstrip('.')
-        print(offset)
         offset = 50000000000 - offset
-        print(offset)
         ans = 0
         for i, x in enumerate(state):
             if x == '#':
