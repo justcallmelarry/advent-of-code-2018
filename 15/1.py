@@ -36,19 +36,11 @@ def bfs(grid, start, target):
         if grid[y][x] == '*':
             grid[target[1]][target[0]] = '.'
             return path
-        for x2, y2 in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+        for x2, y2 in ((x, y - 1), (x - 1, y), (x + 1, y), (x, y + 1)):
             if 0 <= x2 < width and 0 <= y2 < height and grid[y2][x2] in ('.', '*') and (x2, y2) not in seen:
                 queue.append(path + [(x2, y2)])
                 seen.add((x2, y2))
     grid[target[1]][target[0]] = '.'
-
-
-def move2(battleground, unit, target):
-    path = bfs(battleground, (unit.x, unit.y), target)
-    if path:
-        battleground[unit.y][unit.x] = '.'
-        unit.x, unit.y = path[1]
-        battleground[unit.y][unit.x] = unit._name
 
 
 def move(battleground, unit, path):
@@ -76,11 +68,6 @@ def kill_unit(unit, _list, units, battleground):
         units.pop(remove_from_units)
 
 
-def distance2(battleground, unit, enemy):
-    path = bfs(battleground, (unit.x, unit.y), enemy)
-    return len(path) - 1 if path else None
-
-
 def distance(battleground, unit, enemy):
     possible_coords = [
         (enemy.x - 1, enemy.y),
@@ -105,15 +92,15 @@ def distance(battleground, unit, enemy):
     return shortest_path
 
 
-def print_battleground(battleground):
-    for o in battleground:
-        print(''.join(o))
-    return
-    s = [[str(e) for e in row] for row in battleground]
-    lens = [max(map(len, col)) for col in zip(*s)]
-    fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-    table = [fmt.format(*row) for row in s]
-    print('\n'.join(table))
+def print_battleground(battleground, units):
+    bgu = {}
+    for unit in units:
+        if unit.y not in bgu:
+            bgu[unit.y] = []
+        bgu[unit.y].append(unit)
+    for y, o in enumerate(battleground):
+        print(''.join(o), ' ' * 5, sorted(bgu.get(y, []), key=lambda x: x.x))
+    print()
 
 
 def main():
@@ -140,7 +127,7 @@ def main():
 
     rounds = 0
     print(rounds)
-    print_battleground(battleground)
+    print_battleground(battleground, units)
 
     while len(elves) > 0 and len(goblins) > 0:
         temp_units = sorted(units, key=lambda x: (x.y, x.x))
@@ -156,7 +143,7 @@ def main():
             else:
                 _list = goblins
             if not _list:
-                continue
+                break
             for enemy in _list:
                 if (enemy.x, enemy.y) in ((unit.x + 1, unit.y), (unit.x - 1, unit.y), (unit.x, unit.y + 1), (unit.x, unit.y - 1)):
                     attackable_enemies.append(enemy)
@@ -180,26 +167,23 @@ def main():
                             shortest_path = path
             if nearest_dist:
                 if nearest_dist > 1:
-                    print(f'moving {unit} like {shortest_path}')
+                    print(f'moving {unit} from {shortest_path[0]} to {shortest_path[1]} with target {shortest_path[-1]}')
                     move(battleground, unit, shortest_path)
-                for enemy in _list:
-                    path = distance(battleground, unit, enemy)
-                    if path is None:
-                        continue
-                    if len(path) - 1 == 1:
-                        attackable_enemies.append(enemy)
-                if attackable_enemies:
-                    enemy = sorted(attackable_enemies, key=lambda x: x.hp)[0]
-                    enemy.hp -= 3
-                    if enemy.hp <= 0:
-                        kill_unit(enemy, _list, units, battleground)
-                        print(f'killing unit {enemy}, killing blow: {unit} at {unit.y}, {unit.x}')
+            for enemy in _list:
+                if enemy in attackable_enemies:
+                    continue
+                if (enemy.x, enemy.y) in ((unit.x + 1, unit.y), (unit.x - 1, unit.y), (unit.x, unit.y + 1), (unit.x, unit.y - 1)):
+                    attackable_enemies.append(enemy)
+            if attackable_enemies:
+                enemy = sorted(attackable_enemies, key=lambda x: (x.hp, x.y, x.x))[0]
+                enemy.hp -= 3
+                if enemy.hp <= 0:
+                    kill_unit(enemy, _list, units, battleground)
+                    print(f'killing unit {enemy}, killing blow: {unit} at {unit.y}, {unit.x}')
             if unit == temp_units[-1]:
                 rounds += 1
         print(rounds)
-        print_battleground(battleground)
-        print(units)
-        print()
+        print_battleground(battleground, units)
     winners = ''
     total_hp = 0
     for x in elves + goblins:
