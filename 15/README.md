@@ -295,7 +295,7 @@ What is the outcome of the combat described in your puzzle input?
 
 Your puzzle answer was `207542`.
 
---- Part Two ---
+## --- Part Two ---
 According to your calculations, the Elves are going to lose badly. Surely, you won't mess up the timeline too much if you give them just a little advanced technology, right?
 
 You need to make sure the Elves not only win, but also suffer no losses: even the death of a single Elf is unacceptable.
